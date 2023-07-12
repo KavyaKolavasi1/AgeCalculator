@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.29.30151.0	    07/12/23 12:26:57
+Microsoft (R) Macro Assembler Version 14.29.30151.0	    07/12/23 12:29:54
 #Program Template     (template.asm			     Page 1 - 1
 
 
@@ -118,60 +118,62 @@ Microsoft (R) Macro Assembler Version 14.29.30151.0	    07/12/23 12:26:57
  00000019  E8 00000000 E		call	WriteString
  0000001E  E8 00000000 E		call	ReadDec																		
  00000023  A3 00000147 R		mov		birth_year, EAX	
+ 00000028  E8 00000000 E		call	CrLf
 					
 					; Check if the birth year is smaller than current year
- 00000028  A1 00000147 R		mov		EAX,	birth_year
- 0000002D  3D 000007E7			cmp		EAX,	current_year																
- 00000032  7F 5D			jg		_age_Error	
+ 0000002D  A1 00000147 R		mov		EAX,	birth_year
+ 00000032  3D 000007E7			cmp		EAX,	current_year																
+ 00000037  7F 5D			jg		_age_Error	
 
 					; Calculate the birth age
- 00000034  B8 000007E7			mov		EAX, current_year
- 00000039  2B 05 00000147 R		sub		EAX, birth_year
- 0000003F  A3 00000143 R		mov		age_result, EAX
- 00000044  E8 00000000 E		call	CrLf
+ 00000039  B8 000007E7			mov		EAX, current_year
+ 0000003E  2B 05 00000147 R		sub		EAX, birth_year
+ 00000044  A3 00000143 R		mov		age_result, EAX
+ 00000049  E8 00000000 E		call	CrLf
 
 					; Display birth year
 
- 00000049  BA 00000122 R		mov		EDX, OFFSET birth_string_1
- 0000004E  E8 00000000 E		call	WriteString
- 00000053  A1 00000143 R		mov		EAX, age_result
- 00000058  E8 00000000 E		call	WriteDec
- 0000005D  BA 00000132 R		mov		EDX, OFFSET birth_string_2
- 00000062  E8 00000000 E		call	WriteString
- 00000067  E8 00000000 E		call	CrLf
+ 0000004E  BA 00000122 R		mov		EDX, OFFSET birth_string_1
+ 00000053  E8 00000000 E		call	WriteString
+ 00000058  A1 00000143 R		mov		EAX, age_result
+ 0000005D  E8 00000000 E		call	WriteDec
+ 00000062  BA 00000132 R		mov		EDX, OFFSET birth_string_2
+ 00000067  E8 00000000 E		call	WriteString
  0000006C  E8 00000000 E		call	CrLf
+ 00000071  E8 00000000 E		call	CrLf
 
 					; continue loop or not
- 00000071  BA 000000E0 R		mov		EDX, OFFSET end_user
- 00000076  E8 00000000 E		call	WriteString
- 0000007B  E8 00000000 E		call	CrLf
- 00000080  E8 00000000 E		call	ReadDec
- 00000085  A3 0000013F R		mov		quit_result, EAX															
- 0000008A  83 F8 01			cmp		EAX, 1																		
- 0000008D  74 85			je		_continue_loop																
- 0000008F  EB 14			jmp		_end_Program
+ 00000076  BA 000000E0 R		mov		EDX, OFFSET end_user
+ 0000007B  E8 00000000 E		call	WriteString
+ 00000080  E8 00000000 E		call	CrLf
+ 00000085  E8 00000000 E		call	ReadDec
+ 0000008A  A3 0000013F R		mov		quit_result, EAX															
+ 0000008F  83 F8 01			cmp		EAX, 1																		
+ 00000092  74 80			je		_continue_loop																
+ 00000094  EB 19			jmp		_end_Program
 					
- 00000091			_age_Error:
- 00000091  BA 000000B4 R		mov		EDX,OFFSET	error_year														
- 00000096  E8 00000000 E		call	WriteString
- 0000009B  E8 00000000 E		call	CrLf
- 000000A0  E9 FFFFFF6F			jmp		_continue_loop
+ 00000096			_age_Error:
+ 00000096  BA 000000B4 R		mov		EDX,OFFSET	error_year														
+ 0000009B  E8 00000000 E		call	WriteString
+ 000000A0  E8 00000000 E		call	CrLf
+ 000000A5  E8 00000000 E		call	CrLf
+ 000000AA  E9 FFFFFF65			jmp		_continue_loop
 
- 000000A5			_end_Program:
+ 000000AF			_end_Program:
 
 					; Display a closing message
- 000000A5  BA 0000008D R		mov		EDX,OFFSET goodbye
- 000000AA  E8 00000000 E		call	WriteString
- 000000AF  E8 00000000 E		call	CrLf		
+ 000000AF  BA 0000008D R		mov		EDX,OFFSET goodbye
+ 000000B4  E8 00000000 E		call	WriteString
+ 000000B9  E8 00000000 E		call	CrLf		
 
 
 					Invoke ExitProcess,0	; exit to operating system
- 000000B4  6A 00	   *	    push   +000000000h
- 000000B6  E8 00000000 E   *	    call   ExitProcess
- 000000BB			main ENDP
+ 000000BE  6A 00	   *	    push   +000000000h
+ 000000C0  E8 00000000 E   *	    call   ExitProcess
+ 000000C5			main ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 14.29.30151.0	    07/12/23 12:26:57
+Microsoft (R) Macro Assembler Version 14.29.30151.0	    07/12/23 12:29:54
 #Program Template     (template.asm			     Symbols 2 - 1
 
 
@@ -266,7 +268,7 @@ Segments and Groups:
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
 _DATA  . . . . . . . . . . . . .	32 Bit	 0000014B Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000000BB Para	  Public  'CODE'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000000C5 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -373,10 +375,10 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000BB Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000C5 Public STDCALL
   _continue_loop . . . . . . . .	L Near	 00000014 _TEXT	
-  _age_Error . . . . . . . . . .	L Near	 00000091 _TEXT	
-  _end_Program . . . . . . . . .	L Near	 000000A5 _TEXT	
+  _age_Error . . . . . . . . . .	L Near	 00000096 _TEXT	
+  _end_Program . . . . . . . . .	L Near	 000000AF _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C

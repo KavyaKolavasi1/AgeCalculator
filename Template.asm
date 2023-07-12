@@ -37,6 +37,7 @@ _continue_loop:
 	call	WriteString
 	call	ReadDec																		
 	mov		birth_year, EAX	
+	call	CrLf
 	
 	; Check if the birth year is smaller than current year
 	mov		EAX,	birth_year
@@ -73,6 +74,7 @@ _continue_loop:
 _age_Error:
 	mov		EDX,OFFSET	error_year														
 	call	WriteString
+	call	CrLf
 	call	CrLf
 	jmp		_continue_loop
 
