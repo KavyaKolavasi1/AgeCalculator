@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.29.30151.0	    07/12/23 12:13:02
+Microsoft (R) Macro Assembler Version 14.29.30151.0	    07/12/23 12:26:57
 #Program Template     (template.asm			     Page 1 - 1
 
 
@@ -90,9 +90,16 @@ Microsoft (R) Macro Assembler Version 14.29.30151.0	    07/12/23 12:13:02
 	   6F 20 71 75 69
 	   74 21 21 21 20
 	   00
- 00000122 00000000			quit_result		DWORD	?
- 00000126 00000000			age_result		DWORD	?
- 0000012A 00000000			birth_year		DWORD	?
+ 00000122 54 68 69 73 20		birth_string_1	BYTE	"This person is ",0
+	   70 65 72 73 6F
+	   6E 20 69 73 20
+	   00
+ 00000132 20 79 65 61 72		birth_string_2	BYTE	" year's old!",0
+	   27 73 20 6F 6C
+	   64 21 00
+ 0000013F 00000000			quit_result		DWORD	?
+ 00000143 00000000			age_result		DWORD	?
+ 00000147 00000000			birth_year		DWORD	?
 
 
  00000000			.code
@@ -110,44 +117,61 @@ Microsoft (R) Macro Assembler Version 14.29.30151.0	    07/12/23 12:13:02
  00000014  BA 0000006C R		mov		EDX, OFFSET prompt_1
  00000019  E8 00000000 E		call	WriteString
  0000001E  E8 00000000 E		call	ReadDec																		
- 00000023  A3 0000012A R		mov		birth_year, EAX	
+ 00000023  A3 00000147 R		mov		birth_year, EAX	
 					
 					; Check if the birth year is smaller than current year
- 00000028  A1 0000012A R		mov		EAX,	birth_year
+ 00000028  A1 00000147 R		mov		EAX,	birth_year
  0000002D  3D 000007E7			cmp		EAX,	current_year																
- 00000032  7F 20			jg		_age_Error	
+ 00000032  7F 5D			jg		_age_Error	
+
+					; Calculate the birth age
+ 00000034  B8 000007E7			mov		EAX, current_year
+ 00000039  2B 05 00000147 R		sub		EAX, birth_year
+ 0000003F  A3 00000143 R		mov		age_result, EAX
+ 00000044  E8 00000000 E		call	CrLf
+
+					; Display birth year
+
+ 00000049  BA 00000122 R		mov		EDX, OFFSET birth_string_1
+ 0000004E  E8 00000000 E		call	WriteString
+ 00000053  A1 00000143 R		mov		EAX, age_result
+ 00000058  E8 00000000 E		call	WriteDec
+ 0000005D  BA 00000132 R		mov		EDX, OFFSET birth_string_2
+ 00000062  E8 00000000 E		call	WriteString
+ 00000067  E8 00000000 E		call	CrLf
+ 0000006C  E8 00000000 E		call	CrLf
 
 					; continue loop or not
- 00000034  BA 000000E0 R		mov		EDX, OFFSET end_user
- 00000039  E8 00000000 E		call	WriteString
- 0000003E  E8 00000000 E		call	CrLf
- 00000043  E8 00000000 E		call	ReadDec
- 00000048  A3 00000122 R		mov		quit_result, EAX															
- 0000004D  83 F8 01			cmp		EAX, 1																		
- 00000050  74 C2			je		_continue_loop																
- 00000052  EB 11			jmp		_end_Program
+ 00000071  BA 000000E0 R		mov		EDX, OFFSET end_user
+ 00000076  E8 00000000 E		call	WriteString
+ 0000007B  E8 00000000 E		call	CrLf
+ 00000080  E8 00000000 E		call	ReadDec
+ 00000085  A3 0000013F R		mov		quit_result, EAX															
+ 0000008A  83 F8 01			cmp		EAX, 1																		
+ 0000008D  74 85			je		_continue_loop																
+ 0000008F  EB 14			jmp		_end_Program
 					
- 00000054			_age_Error:
- 00000054  BA 000000B4 R		mov		EDX,OFFSET	error_year														
- 00000059  E8 00000000 E		call	WriteString
- 0000005E  E8 00000000 E		call	CrLf
- 00000063  EB AF			jmp		_continue_loop
+ 00000091			_age_Error:
+ 00000091  BA 000000B4 R		mov		EDX,OFFSET	error_year														
+ 00000096  E8 00000000 E		call	WriteString
+ 0000009B  E8 00000000 E		call	CrLf
+ 000000A0  E9 FFFFFF6F			jmp		_continue_loop
 
- 00000065			_end_Program:
+ 000000A5			_end_Program:
 
 					; Display a closing message
- 00000065  BA 0000008D R		mov		EDX,OFFSET goodbye
- 0000006A  E8 00000000 E		call	WriteString
- 0000006F  E8 00000000 E		call	CrLf		
+ 000000A5  BA 0000008D R		mov		EDX,OFFSET goodbye
+ 000000AA  E8 00000000 E		call	WriteString
+ 000000AF  E8 00000000 E		call	CrLf		
 
 
 					Invoke ExitProcess,0	; exit to operating system
- 00000074  6A 00	   *	    push   +000000000h
- 00000076  E8 00000000 E   *	    call   ExitProcess
- 0000007B			main ENDP
+ 000000B4  6A 00	   *	    push   +000000000h
+ 000000B6  E8 00000000 E   *	    call   ExitProcess
+ 000000BB			main ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 14.29.30151.0	    07/12/23 12:13:02
+Microsoft (R) Macro Assembler Version 14.29.30151.0	    07/12/23 12:26:57
 #Program Template     (template.asm			     Symbols 2 - 1
 
 
@@ -241,8 +265,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 0000012E Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 0000007B Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 0000014B Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000000BB Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -349,10 +373,10 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000007B Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000BB Public STDCALL
   _continue_loop . . . . . . . .	L Near	 00000014 _TEXT	
-  _age_Error . . . . . . . . . .	L Near	 00000054 _TEXT	
-  _end_Program . . . . . . . . .	L Near	 00000065 _TEXT	
+  _age_Error . . . . . . . . . .	L Near	 00000091 _TEXT	
+  _end_Program . . . . . . . . .	L Near	 000000A5 _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -571,8 +595,10 @@ VK_UP  . . . . . . . . . . . . .	Number	 00000026h
 WINDOW_BUFFER_SIZE_EVENT . . . .	Number	 00000004h   
 WriteConsoleOutputCharacter  . .	Text   	 WriteConsoleOutputCharacterA
 WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
-age_result . . . . . . . . . . .	DWord	 00000126 _DATA	
-birth_year . . . . . . . . . . .	DWord	 0000012A _DATA	
+age_result . . . . . . . . . . .	DWord	 00000143 _DATA	
+birth_string_1 . . . . . . . . .	Byte	 00000122 _DATA	
+birth_string_2 . . . . . . . . .	Byte	 00000132 _DATA	
+birth_year . . . . . . . . . . .	DWord	 00000147 _DATA	
 black  . . . . . . . . . . . . .	Number	 00000000h   
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brown  . . . . . . . . . . . . .	Number	 00000006h   
@@ -593,7 +619,7 @@ lightMagenta . . . . . . . . . .	Number	 0000000Dh
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
 prompt_1 . . . . . . . . . . . .	Byte	 0000006C _DATA	
-quit_result  . . . . . . . . . .	DWord	 00000122 _DATA	
+quit_result  . . . . . . . . . .	DWord	 0000013F _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA

@@ -14,6 +14,8 @@ current_year = 2023
 	goodbye			BYTE	"Thanks for using the program, goodbye!",0
 	error_year		BYTE	"It is not possible to be born in this year!",0
 	end_user		BYTE	"If you wish to continue please enter 1! Else choose 0 to quit!!! ",0
+	birth_string_1	BYTE	"This person is ",0
+	birth_string_2	BYTE	" year's old!",0
 	quit_result		DWORD	?
 	age_result		DWORD	?
 	birth_year		DWORD	?
@@ -40,6 +42,23 @@ _continue_loop:
 	mov		EAX,	birth_year
 	cmp		EAX,	current_year																
 	jg		_age_Error	
+
+	; Calculate the birth age
+	mov		EAX, current_year
+	sub		EAX, birth_year
+	mov		age_result, EAX
+	call	CrLf
+
+	; Display birth year
+
+	mov		EDX, OFFSET birth_string_1
+	call	WriteString
+	mov		EAX, age_result
+	call	WriteDec
+	mov		EDX, OFFSET birth_string_2
+	call	WriteString
+	call	CrLf
+	call	CrLf
 
 	; continue loop or not
 	mov		EDX, OFFSET end_user
